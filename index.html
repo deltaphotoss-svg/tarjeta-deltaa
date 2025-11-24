@@ -73,9 +73,9 @@
 
         /* FRENTE */
         .card-front {
-            background: #222; 
-            color: white;
-            border: 1px solid #444;
+            background: #f0f0f0; /* ¡Fondo más claro para el frente! */
+            color: #333; /* Color de texto general para fondo claro */
+            border: 1px solid #ddd; /* Borde más suave */
             gap: 15px; 
         }
         
@@ -85,12 +85,14 @@
             margin-bottom: 5px;
         }
         
+        /* AJUSTE DE CONTRASTE: NOMBRE DE EMPRESA EN AZUL OSCURO PARA EL FONDO CLARO */
         .card-front h2 {
             margin: 0;
             font-size: 1.7em;
             font-weight: 700;
             letter-spacing: -2px;
             margin-top: -30px; 
+            color: #004080; /* Azul oscuro que contrasta con el fondo claro */
         }
         
         .card-front h2 .triangle {
@@ -101,7 +103,7 @@
             transform: scaleX(0.9); 
             margin-left: -5px; 
             transition: transform 0.3s, opacity 0.3s;
-            color: #f39c12;
+            color: #f39c12; /* El triángulo se mantiene con el color de acento */
         }
 
         .card-front:hover h2 .triangle {
@@ -109,17 +111,20 @@
             opacity: 0.8;
         }
 
+        /* AJUSTE DE CONTRASTE: PUESTOS Y NOMBRE DE PERSONA EN GRIS OSCURO */
         .card-front p {
-            color: #ccc;
+            color: #333; /* Gris oscuro para mayor legibilidad en fondo claro */
             font-size: 1em;
             margin: 0;
             line-height: 1.3;
         }
 
+        /* AJUSTE DE CONTRASTE: HINT DE TOCAR LA TARJETA EN GRIS MÁS CLARO */
         .tap-hint {
             font-size: 0.75em !important;
-            color: #777 !important;
+            color: #666 !important; /* Gris un poco más claro para el hint */
             margin-top: 10px !important;
+            text-shadow: none; /* Quitamos el resplandor para el fondo claro */
         }
 
         /* DORSO */
@@ -350,7 +355,7 @@
         <div class="card-inner">
             <div class="card-front">
                 <img src="logo.png.png" alt="Logo Delta" class="logo">
-                <h2>DELT<span class="triangle">&#9650;</span> CONSTRUCCIONES</h2>
+                <h2>DELT<span class="triangle">&#9650;</span> CONSTRUCCIONES</h2> 
                 <p>Maestro Mayor de Obras</p>
                 <p>Agustín Martínez</p>
                 <p class="tap-hint">(Toca la tarjeta para ver contacto)</p>
