@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#222">
+	<title>Delta Construcciones - Tarjeta Digital</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+		body {
+			display: flex;
+			justify-content: flex-start; 
+			align-items: center;
+			height: 100vh;
+            padding-left: 10vw; 
+			font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+			position: relative;
+            margin: 0;
+            
+            /* FONDO ANIMADO */
+            background: linear-gradient(-45deg, #2c3e50, #4b4b4b, #000000, #434343);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+		}
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- TARJETA FLIP --- */
+		.card {
+			width: 420px;
+			height: 270px; 
+			perspective: 1200px;
+            z-index: 10;
+		}
+
+		.card-inner {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			transition: transform 0.9s ease;
+			transform-style: preserve-3d;
+		}
+
+		.card:hover .card-inner {
+			transform: rotateY(180deg);
+		}
+        
+        .card.is-flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+		.card-front, .card-back {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			backface-visibility: hidden;
+			border-radius: 14px;
+			box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
+			padding: 25px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center; /* Centra el contenido verticalmente */
+			align-items: center; /* Centra el contenido horizontalmente */
+            box-sizing: border-box;
+            overflow: hidden; /* Para que el logo grande no se salga */
+		}
+
+		/* FRENTE */
+		.card-front {
+			background: #222; 
+			color: white;
+            border: 1px solid #444;
+            gap: 15px; 
+		}
+        
+		.card-front img.logo {
+			width: 150px; /* Tamaño del logo del frente */
+            margin-top: 50px; /* Baja el logo */
+			margin-bottom: 5px;
+		}
+        
+		.card-front h2 {
+			margin: 0;
+			font-size: 1.7em;
+			font-weight: 700;
+            letter-spacing: -2px; /* Ajusta este valor para acercar las letras */
+		}
+        
+        /* Estilo para el triángulo */
+        .card-front h2 .triangle {
+            font-size: 0.9em; /* Para que el triángulo sea un poco más pequeño que el texto */
+            vertical-align: middle; /* Alinea verticalmente con el texto */
+            display: inline-block;
+            line-height: 1; /* Asegura que no añada espacio extra */
+            transform: scaleX(0.9); /* Opcional: ajustar ancho del triángulo si es muy ancho */
+            margin-left: -5px; /* Ajusta este valor para acercar el triángulo a la "T" */
+        }
+
+        .card-front p {
+            color: #ccc;
+            font-size: 1em;
+            margin: 0;
+            /* Subir el texto */
+            margin-top: -30px; /* Ajusta este valor para subir o bajar el texto */
+        }
+
+        .tap-hint {
+            font-size: 0.75em !important;
+            color: #777 !important;
+            margin-top: 10px !important;
+        }
+
+		/* DORSO */
+		.card-back {
+			background: #ffffff;
+			color: #333;
+			transform: rotateY(180deg);
+			justify-content: flex-start; 
+            position: relative; /* Para posicionar el logo trasero */
+            align-items: flex-start; /* Restaurar alineación a la izquierda para el contenido */
+		}
+
+        /* LOGO DE FONDO EN EL DORSO */
+        .card-back .logo-background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Centra el logo */
+            width: 250px; /* Tamaño grande */
+            height: auto;
+            opacity: 0.15; /* Semitransparente */
+            z-index: 1; /* Para que esté detrás del contenido */
+        }
+        
+        .contact-info {
+            width: 100%;
+            text-align: left;
+            margin-top: 5px; 
+            position: relative; /* Para que esté encima del logo de fondo */
+            z-index: 2; 
+        }
+
+		.contact-info p {
+			margin: 6px 0;
+			font-size: 0.9em;
+            white-space: nowrap; 
+		}
+
+		.contact-info a {
+            text-decoration: none;
+            color: #333;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-info a:hover {
+            color: #004080;
+            font-weight: bold;
+        }
+
+        /* ESTILO PARA ICONOS EN EL DORSO */
+        .social-icon { 
+            width: 20px; 
+            height: 20px; 
+            vertical-align: middle; 
+            margin-right: 0px; 
+            border-radius: 4px;
+        }
+        
+        .buttons-container {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+            position: relative; /* Para que esté encima del logo de fondo */
+            z-index: 2; 
+        }
+
+		.btn {
+			padding: 8px 14px;
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+			font-size: 0.85em;
+			transition: background 0.3s, transform 0.1s;
+            color: white;
+            font-weight: bold;
+            flex: 1; 
+		}
+        
+        .btn:active { transform: scale(0.95); }
+        .btn-servicios { background: #004080; }
+        .btn-servicios:hover { background: #003366; }
+        .btn-save { background: #28a745; }
+        .btn-save:hover { background: #218838; }
+
+        /* --- VENTANA LATERAL --- */
+        #services-sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 350px; 
+            height: 100%;
+            background: #f7f7f7;
+            box-shadow: -4px 0 10px rgba(0,0,0,0.3);
+            padding: 20px;
+            transform: translateX(100%); 
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 20; 
+            overflow-y: auto; 
+            box-sizing: border-box; 
+        }
+
+        #services-sidebar.open {
+            transform: translateX(0);
+        }
+
+        #services-sidebar h3 {
+            color: #004080;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 5px;
+            font-size: 1.1em;
+        }
+        
+        /* --- GALERÍA --- */
+        .gallery-container {
+            margin-bottom: 20px;
+            position: relative;
+            width: 100%;
+            height: 180px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background: #ddd;
+        }
+        .gallery-slide { display: none; width: 100%; height: 100%; }
+        .gallery-slide img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-slide.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0.5; } to { opacity: 1; } }
+        .prev, .next {
+            cursor: pointer; position: absolute; top: 50%; width: auto; margin-top: -22px; padding: 10px;
+            color: white; font-weight: bold; font-size: 18px; transition: 0.6s ease;
+            background-color: rgba(0,0,0,0.4); border-radius: 0 3px 3px 0; user-select: none;
+        }
+        .next { right: 0; border-radius: 3px 0 0 3px; }
+        .prev:hover, .next:hover { background-color: rgba(0,0,0,0.8); }
+
+        /* --- FORMULARIO PRESUPUESTO --- */
+        .quote-form {
+            background: #e6f0fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #b3d1ff;
+        }
+        .quote-form label { display: block; margin-bottom: 5px; font-size: 0.9em; color: #333; font-weight: bold; }
+        .quote-form input, .quote-form select { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn-submit { width: 100%; background: #25d366; color: white; font-weight: bold; border: none; padding: 10px; border-radius: 4px; cursor: pointer; }
+        .btn-submit:hover { background: #1ebe57; }
+
+        /* --- TESTIMONIOS --- */
+        .testimonial {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            border-left: 3px solid #f39c12;
+        }
+        .testimonial p { margin: 0; font-style: italic; color: #555; }
+        .testimonial span { display: block; margin-top: 5px; font-weight: bold; color: #333; text-align: right; font-size: 0.85em; }
+
+        /* --- ACORDEON --- */
+		.accordion-container { margin-top: 5px; width: 100%; }
+		.service-item {
+			background: white; margin-bottom: 8px; border-radius: 6px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #eee;
+		}
+        .service-header {
+            padding: 10px; cursor: pointer; font-weight: bold; display: flex;
+            justify-content: space-between; align-items: center; background: white;
+            font-size: 0.9em; transition: background 0.2s;
+        }
+        .service-header:hover { background: #f0f8ff; color: #004080; }
+        .arrow { font-size: 0.8em; transition: transform 0.3s ease; color: #888; }
+        .service-details {
+            max-height: 0; overflow: hidden; background: #fafafa;
+            transition: max-height 0.3s ease-out; border-top: 1px solid transparent;
+        }
+        .service-details ul { list-style: none; margin: 0; padding: 12px; font-size: 0.85em; color: #555; }
+        .service-details li { margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .service-details li::before { content: "•"; color: #004080; font-weight: bold; }
+        .service-item.active .service-details { max-height: 300px; border-top: 1px solid #eee; }
+        .service-item.active .arrow { transform: rotate(180deg); color: #004080; }
+        .service-item.active .service-header { color: #004080; background: #f0f8ff; }
+        
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 15;
+            display: none; opacity: 0; transition: opacity 0.3s;
+        }
+        #overlay.show { display: block; opacity: 1; }
+
+        /* --- BOTÓN FLOTANTE WHATSAPP --- */
+        .float-wa {
+            position: fixed; width: 60px; height: 60px; bottom: 20px; right: 20px;
+            background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center;
+            font-size: 30px; box-shadow: 2px 2px 10px rgba(0,0,0,0.3); z-index: 100;
+            display: flex; align-items: center; justify-content: center; text-decoration: none;
+            transition: transform 0.3s;
+        }
+        .float-wa:hover { transform: scale(1.1); background-color: #1ebe57; }
+
+        /* --- RESPONSIVE CELULAR --- */
+        @media (max-width: 768px) {
+            body { justify-content: center; padding-left: 0; }
+            .card { width: 90%; max-width: 400px; height: 320px; }
+            #services-sidebar { width: 90%; } 
+            .float-wa { width: 50px; height: 50px; font-size: 24px; bottom: 15px; right: 15px; }
+        }
+
+	</style>
+</head>
+<body>
+
+    <a href="https://wa.me/5492932532523?text=Hola%20Delta%20Construcciones" class="float-wa" target="_blank" title="Chatear ahora">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.0117 2C6.50574 2 2.02344 6.47837 2.02344 11.9841C2.02344 13.7432 2.48152 15.4278 3.32483 16.892L2 21.7314L6.96981 20.4283C8.38466 21.199 9.99849 21.6053 11.6372 21.6053H12.0081C17.5141 21.6053 21.9963 17.1269 21.9963 11.6212C21.9927 8.96344 20.9599 6.4632 19.0792 4.58249C17.1984 2.70178 14.6982 1.66898 12.0117 2ZM12.0117 19.9298C10.5332 19.9298 9.07342 19.5348 7.80859 18.783L7.50977 18.6055L4.40234 19.4209L5.23145 16.3926L4.93262 15.918C4.12745 14.6393 3.70231 13.1607 3.70586 11.6567C3.70586 7.07227 7.43432 3.34375 12.0152 3.34375C14.2325 3.34375 16.3153 4.20786 17.8821 5.77461C19.449 7.34136 20.3131 9.42417 20.3131 11.646C20.3131 16.2305 16.5847 19.959 12.0117 19.959V19.9298Z"/>
+        </svg>
+    </a>
+
+    <div id="overlay" onclick="toggleSidebar()"></div>
+
+	<div class="card" onclick="this.classList.toggle('is-flipped')">
+		<div class="card-inner">
+			<div class="card-front">
+                <img src="logo.png.png" alt="Logo Delta" class="logo">
+				<h2>DELT<span class="triangle">&#9650;</span> CONSTRUCCIONES</h2>
+				<p style="margin-top: -30px;">Maestro Mayor de Obras</p>
+                <p>Agustín Martínez</p>
+                <p class="tap-hint">(Toca la tarjeta para ver contacto)</p>
+			</div>
+
+			<div class="card-back">
+                <img src="logo.png.png" alt="Logo Delta Fondo" class="logo-background">
+				<div class="contact-info">
+                    <p><a href="tel:+5492932532523">📞 +54 9 2932 53-2523</a></p>
+					<p><a href="https://wa.me/5492932532523" target="_blank">🟢 WhatsApp: 2932 53-2523</a></p>
+					<p><a href="mailto:contacto@deltaconstrucciones.com">✉️ contacto@deltaconstrucciones.com</a></p>
+                    <p>
+                        <a href="https://www.instagram.com/_.Delta.construcciones" target="_blank">
+                            <img src="instagram.png.png" class="social-icon" alt="Instagram">
+                            @_.Delta.construcciones
+                        </a>
+                    </p>
+					<p><a href="http://www.deltaconstrucciones.com" target="_blank">🌐 www.deltaconstrucciones.com</a></p>
+				</div>
+                
+                <div class="buttons-container">
+				    <button class="btn btn-servicios" onclick="event.stopPropagation(); toggleSidebar()">Menú & Servicios</button>
+				    <button class="btn btn-save" onclick="event.stopPropagation(); descargarVCard()">Guardar Contacto</button>
+                </div>
+			</div>
+		</div>
+	</div>
+
+    <div id="services-sidebar">
+        
+        <h3 style="margin-top: 0;">Nuestros Trabajos</h3>
+        <div class="gallery-container">
+            <div class="gallery-slide active">
+                <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Obra 1">
+            </div>
+            <div class="gallery-slide">
+                <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Obra 2">
+            </div>
+            <div class="gallery-slide">
+                <img src="https://images.unsplash.com/photo-1590074696001-c854c60959e4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Obra 3">
+            </div>
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+
+        <h3>Solicitar Presupuesto</h3>
+        <div class="quote-form">
+            <label>Tu Nombre:</label>
+            <input type="text" id="clientName" placeholder="Ej: Juan Pérez">
+            
+            <label>Me interesa:</label>
+            <select id="clientService">
+                <option value="Construcción en Seco">Construcción en Seco</option>
+                <option value="Obra Tradicional">Obra Tradicional</option>
+                <option value="Instalaciones">Instalaciones</option>
+                <option value="Planos y Render">Planos y Render</option>
+                <option value="Otro">Consulta General</option>
+            </select>
+            
+            <button class="btn-submit" onclick="enviarPresupuesto()">Enviar por WhatsApp 🟢</button>
+        </div>
+
+        <h3>Detalle de Servicios</h3>
+        <div class="accordion-container">
+            <div class="service-item">
+                <div class="service-header" onclick="toggleItem(this)">
+                    <span>🏗️ Obras Civiles</span> <span class="arrow">▼</span>
+                </div>
+                <div class="service-details">
+                    <ul>
+                        <li>Movimiento de suelos</li>
+                        <li>Fundaciones y bases</li>
+                        <li>Estructuras de hormigón</li>
+                        <li>Pavimentación</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="service-header" onclick="toggleItem(this)">
+                    <span>🏢 Obras Comerciales</span> <span class="arrow">▼</span>
+                </div>
+                <div class="service-details">
+                    <ul>
+                        <li>Locales llave en mano</li>
+                        <li>Oficinas corporativas</li>
+                        <li>Galpones industriales</li>
+                        <li>Instalaciones especiales</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="service-header" onclick="toggleItem(this)">
+                    <span>🏠 Obras Residenciales</span> <span class="arrow">▼</span>
+                </div>
+                <div class="service-details">
+                    <ul>
+                        <li>Viviendas unifamiliares</li>
+                        <li>Complejos habitacionales</li>
+                        <li>Refacciones y ampliaciones</li>
+                        <li>Mantenimiento general</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="service-header" onclick="toggleItem(this)">
+                    <span>⚡ Instalaciones</span> <span class="arrow">▼</span>
+                </div>
+                <div class="service-details">
+                    <ul>
+                        <li>Instalaciones eléctricas</li>
+                        <li>Gas y sanitarios</li>
+                        <li>Calefacción y aire acondicionado</li>
+                        <li>Redes de datos y seguridad</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="service-header" onclick="toggleItem(this)">
+                    <span>📐 Modelado 3D</span> <span class="arrow">▼</span>
+                </div>
+                <div class="service-details">
+                    <ul>
+                        <li>Renders fotorrealistas</li>
+                        <li>Recorridos virtuales</li>
+                        <li>Planos municipales</li>
+                        <li>Diseño de interiores</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="service-header" onclick="toggleItem(this)">
+                    <span>📊 Gestión de Obra</span> <span class="arrow">▼</span>
+                </div>
+                <div class="service-details">
+                    <ul>
+                        <li>Cómputo y presupuesto</li>
+                        <li>Dirección de obra</li>
+                        <li>Cronogramas de ejecución</li>
+                        <li>Asesoramiento técnico</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <h3>Lo que dicen nuestros clientes</h3>
+        <div class="testimonial">
+            <p>"Excelente trabajo en Steel Frame. Muy prolijos y terminaron antes de tiempo."</p>
+            <span>- Carlos M.</span>
+        </div>
+        <div class="testimonial">
+            <p>"Me realizaron los planos y la aprobación municipal sin vueltas. Recomendados."</p>
+            <span>- Sofía R.</span>
+        </div>
+
+        <button class="btn" style="background: #cc0000; margin-top: 20px; width: 100%; margin-bottom: 20px;" onclick="toggleSidebar()">Cerrar Menú</button>
+    </div>
+
+	<script>
+        // TOGGLE MENU
+		function toggleSidebar() {
+			const sidebar = document.getElementById('services-sidebar');
+            const overlay = document.getElementById('overlay');
+			sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+		}
+
+        // ACORDEON
+        function toggleItem(headerElement) {
+            const item = headerElement.parentElement;
+            const allItems = document.querySelectorAll('.service-item');
+            allItems.forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('active');
+                }
+            });
+            item.classList.toggle('active');
+        }
+
+        // ENVIAR PRESUPUESTO
+        function enviarPresupuesto() {
+            const nombre = document.getElementById('clientName').value;
+            const servicio = document.getElementById('clientService').value;
+            
+            if(nombre.trim() === "") {
+                alert("Por favor, escribe tu nombre.");
+                return;
+            }
+
+            const mensaje = `Hola Delta Construcciones, soy ${nombre}. Quisiera solicitar un presupuesto o asesoramiento sobre: ${servicio}.`;
+            const telefono = "5492932532523"; 
+            window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
+        }
+
+        // DESCARGAR VCARD
+        function descargarVCard() {
+            const vCardData = [
+                'BEGIN:VCARD',
+                'VERSION:3.0',
+                'FN:Delta Construcciones - Agustín Martínez', 
+                'ORG:Delta Construcciones', 
+                'TITLE:Maestro Mayor de Obras', 
+                'TEL;TYPE=WORK,VOICE:+5492932532523', 
+                'EMAIL:contacto@deltaconstrucciones.com', 
+                'URL:http://www.deltaconstrucciones.com', 
+                'X-SOCIALPROFILE;type=instagram:_.Delta.construcciones',
+                'END:VCARD'
+            ].join('\n');
+
+            const blob = new Blob([vCardData], { type: 'text/vcard' });
+            const url = URL.createObjectURL(blob);
+            const enlace = document.createElement('a');
+            enlace.href = url;
+            enlace.download = 'Delta_Construcciones_Agustin_Martinez.vcf';
+            document.body.appendChild(enlace);
+            enlace.click();
+            document.body.removeChild(enlace);
+        }
+
+        // GALERÍA
+        let slideIndex = 1;
+        function plusSlides(n) { showSlides(slideIndex += n); }
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("gallery-slide");
+            if (n > slides.length) {slideIndex = 1}    
+            if (n < 1) {slideIndex = slides.length}
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";  
+                slides[i].classList.remove("active");
+            }
+            slides[slideIndex-1].style.display = "block";  
+            slides[slideIndex-1].classList.add("active");
+        }
+	</script>
+</body>
+</html>
